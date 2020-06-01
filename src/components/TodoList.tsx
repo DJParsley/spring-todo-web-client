@@ -1,14 +1,12 @@
 import React, {Component} from 'react';
-import TodoItem from "./TodoItem";
-import {Row, Space} from "antd";
-import {getTodos} from '../services/todoService';
 import Todo from "../services/Todo";
-
-import styles from './styles.module.css';
-import TodoForm from "./TodoForm";
+import {getTodos} from "../services/todoService";
+import {Space} from "antd";
+// @ts-ignore
+import TodoItem from "./TodoItem";
 
 interface TodoListState {
-    todos: Todo[];
+    todos: Todo[],
     loading: boolean;
 
 }
@@ -18,29 +16,24 @@ class TodoList extends Component<any, TodoListState> {
         todos: [],
         loading: true
     }
+
     async componentDidMount() {
-        await this.loadPage();
-    }
-    loadPage = async () => {
-        let todos = await getTodos()
-        this.setState({todos, loading: false});
+        let todos = await getTodos();
+        this.setState({todos, loading: false})
     }
 
     render() {
         return (
-            <div className={styles.todoBody}>
-                <h2>This is a todo list</h2>
+            <div>
+                <h2> Todo List</h2>
                 { this.state.loading ? (
-                    <h2>Loading...</h2>
+                    <h2>This is loading</h2>
                 ) : (
-                    <>
-                        <TodoForm reload={this.loadPage}/>
-                        <Row className={styles.todoRows}>
+                        <Space direction="vertical" style={{width: 300}}>
                             {this.state.todos.map((todo: Todo) =>
-                                <TodoItem todo={todo}/>
-                            )}
-                        </Row>
-                    </>
+                             <TodoItem key={todo.id} todo={todo}/>
+                    )}
+                        </Space>
                 )}
             </div>
         );
